@@ -1,0 +1,4 @@
+interface:
+  display_name: "Synthetic Task Forge"
+  short_description: "Build validated synthetic-data packages with separated solver"
+  default_prompt: "Use $forge-task-package on the local example in this repository."

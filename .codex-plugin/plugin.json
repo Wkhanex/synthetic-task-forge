@@ -1,0 +1,21 @@
+{
+  "name": "synthetic-task-forge",
+  "version": "0.1.0",
+  "description": "Build validated synthetic-data packages with separated solver and reviewer artifacts.",
+  "author": {
+    "name": "Waleed Khan"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Synthetic Task Forge",
+    "shortDescription": "Forge reproducible task packs",
+    "longDescription": "Build validated synthetic-data packages with separated solver and reviewer artifacts.",
+    "developerName": "Waleed Khan",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": "Use $forge-task-package on the local example in this repository."
+  }
+}

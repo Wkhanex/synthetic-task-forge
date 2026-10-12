@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task_id": "receipts-review",
+  "prompt": "Reconcile the invoice export to the customer register. Calculate total receipts and identify any invalid customer references. Return a short review with your working.",
+  "files": [
+    {
+      "name": "invoices.csv",
+      "format": "csv",
+      "audience": "solver",
+      "columns": [
+        "invoice_id",
+        "customer_id",
+        "amount"
+      ],
+      "rows": [
+        {
+          "invoice_id": "I-101",
+          "customer_id": "C-1",
+          "amount": "800.00"
+        },
+        {
+          "invoice_id": "I-102",
+          "customer_id": "C-2",
+          "amount": "275.50"
+        },
+        {
+          "invoice_id": "I-103",
+          "customer_id": "C-1",
+          "amount": "125.00"
+        }
+      ]
+    },
+    {
+      "name": "customers.csv",
+      "format": "csv",
+      "audience": "solver",
+      "columns": [
+        "customer_id",
+        "name"
+      ],
+      "rows": [
+        {
+          "customer_id": "C-1",
+          "name": "Bramley Studio"
+        },
+        {
+          "customer_id": "C-2",
+          "name": "Mossgate Repairs"
+        }
+      ]
+    },
+    {
+      "name": "operations-note.txt",
+      "format": "text",
+      "audience": "solver",
+      "content": "September export. All amounts are GBP receipts, including VAT. Use the customer register as the identifier reference.\n"
+    },
+    {
+      "name": "review-answer.json",
+      "format": "json",
+      "audience": "reviewer",
+      "content": {
+        "total": "1200.50",
+        "marker": "GOLD_SOLUTION",
+        "invalid_customer_ids": []
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "id": "total",
+      "kind": "csv_sum",
+      "file": "invoices.csv",
+      "column": "amount",
+      "expected": "1200.50"
+    },
+    {
+      "id": "invoice_ids",
+      "kind": "csv_unique",
+      "file": "invoices.csv",
+      "column": "invoice_id"
+    },
+    {
+      "id": "customer_links",
+      "kind": "csv_foreign_key",
+      "file": "invoices.csv",
+      "column": "customer_id",
+      "target": "customers.csv",
+      "target_column": "customer_id"
+    },
+    {
+      "id": "review_total",
+      "kind": "json_equals",
+      "file": "review-answer.json",
+      "pointer": "/total",
+      "expected": "1200.50"
+    },
+    {
+      "id": "currency_note",
+      "kind": "text_contains",
+      "file": "operations-note.txt",
+      "text": "GBP receipts"
+    }
+  ],
+  "forbidden_solver_terms": [
+    "GOLD_SOLUTION",
+    "internal_grading_only"
+  ]
+}
